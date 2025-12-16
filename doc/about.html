@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <title>About</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      border-radius: 6px;
+      border: none;
+      color: #fff;
+      background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
+      background-origin: border-box;
+      box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .button:focus {
+      box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1.5px rgba(54, 122, 246, 0.25), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+      outline: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #333333;
+    }
+
+    .about-section {
+      margin-bottom: 40px;
+    }
+
+    .system-description {
+      font-size: 1.1em;
+      color: #555555;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .team-section h2 {
+      font-size: 1.8em;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    .team-members {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .member {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .member-name {
+      font-size: 1.2em;
+      color: #333333;
+    }
+
+    .member-role {
+      font-size: 1em;
+      color: #777777;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <img src="https://i.imghippo.com/files/lvbvi1723795719.jpg" alt="Policija Logo" class="logo" />
+      <h1>O aplikaciji</h1>
+    </header>
+    <section class="about-section">
+      <p class="system-description">
+        Informacioni sistem policije je sveobuhvatno softversko rješenje dizajnirano da automatizuje i pojednostavi
+        svakodnevne operacije upravljanja policijskim tijelima i službenicima.
+        Sistem integriše ključne funkcije kao što su upravljanje službenicima, praćenje incidenata, generisanje izvještaja, i analizu podataka, sve kroz jedinstven i intuitivan interfejs.
+        Cilj projekta je da pruži policijskim organima moćan alat koji će im pomoći da povećaju efikasnost, smanje operativne troškove i poboljšaju preciznost i kvalitet rada.
+        <br><br>
+        Projekat koristi Java Swing za razvoj korisničkog interfejsa, SQL Server za upravljanje bazom podataka, i JasperSoft za generisanje izvještaja.
+        Takođe, primenjuju se najbolje prakse dizajna softvera, uključujući MVC i State dizajn obrazce.
+      </p>
+    </section>
+    <section class="team-section">
+      <h2>Projektni tim</h2>
+      Projektni tim čini 5 studenata Elektrotehničkog fakulteta u Istočnom Sarajevu. <br><br>
+      <div class="team-members">
+        <div class="member">
+          <p class="member-name">Tamara Elez</p>
+          <p class="member-role">Član tima</p>
+        </div>
+        <div class="member">
+          <p class="member-name">Nevena Antunović</p>
+          <p class="member-role">Član tima</p>
+        </div>
+        <div class="member">
+          <p class="member-name">Helena Popović</p>
+          <p class="member-role">Član tima</p>
+        </div>
+        <div class="member">
+          <p class="member-name">Mladen Perišić</p>
+          <p class="member-role">Član tima</p>
+        </div>
+        <div class="member">
+          <p class="member-name">Nikola Milašinović</p>
+          <p class="member-role">Project manager</p>
+        </div>
+        <div class="member">
+          <img style="width: 102px;height: 80px;" src="https://i.imghippo.com/files/dPjW21723796415.jpg" alt="bot Logo"
+            class="logo" />
+          <button class="button">ChatBot</button>
+        </div>
+        <div class="member">
+          <img style="width: 90px;height: 80px;" src="https://i.imghippo.com/files/LirmU1723796565.jpg" alt="Call logo"
+            class="logo" />
+          <button class="button">Pozovi pomoć</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
