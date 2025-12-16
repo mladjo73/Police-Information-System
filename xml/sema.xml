@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database xmlns="http://www.example.org/xml-db" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Policija" xsi:schemaLocation="http://www.example.org/xml-db xml-db.xsd">
+	<connection address="78.28.157.8" database="PIS2023" database_type="MsSQL" password="EtfPIS2023G41549" port="1435" schema="pisg4" username="EtfPIS2023G4" />
+
+
+	<package name="Policija">
+
+		<table code="Incidenti" name="Incidenti">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip incidenta</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Status" group="0" name="Status" nullable="false" primary="false" size="" type="int">
+				<reftable>Status incidenta</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Ishod" group="0" name="Ishod" nullable="false" primary="false" size="" type="int">
+				<reftable>Ishod incidenta</reftable>
+				<refcolumn>Opis</refcolumn>
+			</column>
+			<column code="Lokacija" group="0" name="Lokacija" nullable="false" primary="false" size="" type="int">
+				<reftable>Lokacije</reftable>
+				<refcolumn>Adresa</refcolumn>
+			</column>
+			<column code="Opština" group="0" name="Opština" nullable="false" primary="false" size="3" type="numeric(3,0)">
+				<reftable>Opština</reftable>
+				<refcolumn>Naziv opštine</refcolumn>
+			</column>
+			<column code="Početak" group="0" name="Početak" nullable="false" primary="false" size="" type="datetime" />
+			<column code="Zatvoren" group="0" name="Zatvoren" nullable="false" primary="false" size="" type="datetime" />
+			<column code="Opis" group="0" name="Opis" nullable="false" primary="false" size="200" type="varchar(200)" />
+			<column code="Dodatno" group="0" name="Dodatno" nullable="true" primary="false" size="50" type="varchar(50)" />
+			<crud>
+				<create>{call CreateIncident(?,?,?,?,?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllIncident()}</retrieve>
+				<update>{call UpdateIncident(?,?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteIncident(?)}</delete>
+			</crud>
+		</table>
+		<table code="Polcijski sluzbenici na incidentu" name="Polcijski sluzbenici na incidentu">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="ID" group="0" name="ID" nullable="false" primary="true" size="" type="int" />
+			<column code="Br. značke" group="0" name="Br. značke" nullable="false" primary="false" size="" type="int">
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Službenik" group="0" name="Službenik" nullable="true" primary="true" size="100" type="varchar(100)"></column>
+			<column code="Identifikator incidenta" group="0" name="Identifikator incidenta" nullable="false" primary="false" size="" type="int">
+				<reftable>Incident</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="true" size="200" type="varchar(200)" />
+			<column code="Lokacija" group="0" name="Lokacija" nullable="true" primary="true" size="" type="int">
+				<references refColumn="Naziv" refTable="Status osobe" />
+				
+			</column>
+			<crud>
+				<create>{call CreateSluzbenikIncident(?,?,?,?,?,?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllSluzbeniciUIncidentima()}</retrieve>
+				<update>{call UpdateSluzbenikIncident(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteSluzbeniciUIncidentima(?)}</delete>
+			</crud>
+		</table>
+		<table code="Osobe u incidentu" name="Osobe u incidentu">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="ID" group="0" name="ID" nullable="false" primary="true" size="" type="int" />
+			<column code="Identifikator osobe" group="0" name="Identifikator osobe" nullable="false" primary="false" size="" type="int">
+				<reftable>Osoba</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Identifikator incidenta" group="0" name="Identifikator incidenta" nullable="false" primary="false" size="" type="int">
+				<reftable>Incident</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Opis incidenta" group="0" name="Opis incidenta" nullable="true" primary="true" size="" type="varchar(255)" />
+			<column code="Lokacija incidenta" group="0" name="Lokacija incidenta" nullable="true" primary="true" size="" type="varchar(255)" />
+			<column code="Ime" group="0" name="Ime" nullable="true" primary="true" size="20" type="varchar(20)" />
+			<column code="Prezime" group="0" name="Prezime" nullable="true" primary="true" size="20" type="varchar(20)" />
+			<column code="Nadimak" group="0" name="Nadimak" nullable="true" primary="true" size="20" type="varchar(20)" />
+			<column code="Detalji" group="0" name="Detalji" nullable="true" primary="true" size="200" type="varchar(200)" />
+			<column code="Status" group="0" name="Status" nullable="true" primary="true" size="" type="varchar(50)">
+				<references refColumn="Naziv" refTable="Status osobe" />
+			</column>
+			<crud>
+				<create>{call CreateOsobaIncident(?,?)}</create>
+				<retrieve>{call RetrieveAllOsobeUIncidentima()}</retrieve>
+				<update>{call UpdateOsobaIncident(?,?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteOsobaIncident(?)}</delete>
+			</crud>
+		</table>
+
+		<table code="Vozila u incidentima" name="Vozila u incidentima">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="ID" group="0" name="ID" nullable="false" primary="true" size="" type="int" />
+			<column code="Identifikator vozila" group="0" name="Identifikator vozila" nullable="false" primary="false" size="" type="int">
+				<reftable>Vozila</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Identifikator incidenta" group="0" name="Identifikator incidenta" nullable="false" primary="false" size="" type="int">
+				<reftable>Incident</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Opis incidenta" group="0" name="Opis incidenta" nullable="true" primary="true" size="200" type="varchar(200)">
+				<references refColumn="Opis incidenta" refTable="Incident" />
+			</column>
+			<column code="Lokacija incidenta" group="0" name="Lokacija incidenta" nullable="true" primary="true" size="" type="varchar(200)">
+				<references refColumn="Adresa" refTable="Lokacije" />
+			</column>
+			<column code="Broj šasije" group="0" name="Broj šasije" nullable="true" primary="true" size="20" type="varchar(20)" />
+			<column code="Marka vozila" group="0" name="Marka vozila" nullable="true" primary="true" size="50" type="varchar(50)">
+				<references refColumn="Marka" refTable="Vozila" />
+			</column>
+			<column code="Model vozila" group="0" name="Model vozila" nullable="true" primary="true" size="50" type="varchar(50)">
+				<references refColumn="Model" refTable="Vozila" />
+			</column>
+			<column code="Godište" group="0" name="Godište" nullable="true" primary="true" size="" type="int">
+				<references refColumn="Godina proizvodnje" refTable="Vozila" />
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="true" size="200" type="varchar(200)">
+				<references refColumn="Opis" refTable="Vozila" />
+			</column>
+			<crud>
+				<create>{call CreateVozilaUIncidentima(?,?)} </create>
+				<retrieve>{call RetrieveAllVozilaUIncidentima()}</retrieve>
+				<update>{call UpdateVozilaUIncidentima(?,?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteVozilaUIncidentima(?)} </delete>
+			</crud>
+		</table>
+		<table code="Objekti u incidentima" name="Objekti u incidentima">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="ID" group="0" name="ID" nullable="false" primary="true" size="" type="int" />
+			<column code="Identifikator objekta" group="0" name="Identifikator objekta" nullable="false" primary="false" size="" type="int">
+				<reftable>Objekti</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Identifikator incidenta" group="0" name="Identifikator incidenta" nullable="false" primary="false" size="" type="int">
+				<reftable>Incident</reftable>
+				<refcolumn>Identifikator</refcolumn>
+			</column>
+			<column code="Opis incidenta" group="0" name="Opis incidenta" nullable="true" primary="true" size="200" type="varchar(200)">
+				<references refColumn="Opis incidenta" refTable="Incident" />
+			</column>
+			<column code="Lokacija incidenta" group="0" name="Lokacija incidenta" nullable="true" primary="true" size="100" type="varchar(100)">
+				<references refColumn="Adresa" refTable="Lokacije" />
+			</column>
+
+			<column code="Naziv" group="0" name="Naziv" nullable="true" primary="true" size="50" type="varchar(50)">
+				<references refColumn="Naziv" refTable="Objekti" />
+			</column>
+			<column code="Tip" group="0" name="Tip" nullable="true" primary="true" size="50" type="varchar(50)">
+				<references refColumn="Naziv" refTable="Tip fizickog objekta" />
+			</column>
+			<column code="Detaljno" group="0" name="Detaljno" nullable="true" primary="true" size="250" type="varchar(250)">
+				<references refColumn="Opis" refTable="Objekti" />
+			</column>
+			<crud>
+				<create>{call CreateObjektiUIncidentu(?, ?)}</create>
+				<retrieve>{call RetrieveAllObjektiUIncidentima()}</retrieve>
+				<update>{call UpdateObjektiUIncidentu(?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteObjekatIncident(?)}</delete>
+			</crud>
+		</table>
+		<table code="Dokazi" name="Dokazi">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip dokaza" group="0" name="Tip dokaza" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip dokaza</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Porijeklo" group="0" name="Porijeklo" nullable="true" primary="false" size="50" type="varchar(50)" />
+			<column code="Opis" group="0" name="Opis" nullable="false" primary="false" size="100" type="varchar(100)" />
+			<column code="Detalji" group="0" name="Detalji" nullable="true" primary="false" size="50" type="varchar(50)" />
+			<column code="Zapakovan" group="0" name="Zapakovan" nullable="false" primary="false" size="" type="bit" />
+			<column code="Organizaciona jedinica" group="0" name="Organizaciona jedinica" nullable="true" primary="false" size="120" type="varchar(120)">
+				<reftable>Organizaciona jedinica</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<crud>
+				<create>{call CreateDokaz(?,?,?,?,?,?)}</create>
+				<retrieve>{call RetreiveAllDokazi()}</retrieve>
+				<update>{call UpdateDokazi(?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteDokaz(?)}</delete>
+			</crud>
+		</table>
+
+	</package>
+	<package name="Izvještaji">
+		<table code="Pregled svih izvještaja" name="Pregled svih izvještaja">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip izvjestaja</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+
+			<column code="Detaljno" group="0" name="Detaljno" nullable="true" primary="false" size="500" type="varchar(500)" />
+
+			<column code="Kreirao zaposleni" group="0" name="Kreirao zaposleni" nullable="false" primary="false" size="120" type="varchar(120)">
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Datum kreiranja" group="0" name="Datum kreiranja" nullable="false" primary="false" size="" type="datetime" />
+			<crud>
+				<create>{call CreateIzvjestaj(?,?,?,?,?)}</create> <!-- PROveriti proceduru za datum generalno za create -->
+				<retrieve>{call RetrieveAllIzvjestaj()}</retrieve>
+				<update>{call UpdateIzvjestaj(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteIzvjestaj(?)}</delete>
+			</crud>
+		</table>
+		<table code="Izvještaji o incidentima" name="Izvještaji o incidentima">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip izvjestaja</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+
+			<column code="Detaljno" group="0" name="Detaljno" nullable="true" primary="false" size="500" type="varchar(500)" />
+
+			<column code="Kreirao zaposleni" group="0" name="Kreirao zaposleni" nullable="false" primary="false" size="120" type="varchar(120)">
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Datum kreiranja" group="0" name="Datum kreiranja" nullable="false" primary="false" size="" type="datetime" />
+			<crud>
+				<create>{call CreateIzvjestaj(?,?,?,?,?)}</create> <!-- PROveriti proceduru za datum generalno za create -->
+				<retrieve>{call RetrieveAllIzvjestajIncident()}</retrieve>
+				<update>{call UpdateIzvjestaj(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteIzvjestaj(?)}</delete>
+			</crud>
+		</table>
+		<table code="Izvještaji o službenicima" name="Izvještaji o službenicima">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip izvjestaja</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+
+			<column code="Detaljno" group="0" name="Detaljno" nullable="true" primary="false" size="500" type="varchar(500)" />
+			<column code="Kreirao zaposleni" group="0" name="Kreirao zaposleni" nullable="false" primary="false" size="120" type="varchar(120)">
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Datum kreiranja" group="0" name="Datum kreiranja" nullable="false" primary="false" size="" type="datetime" />
+
+			<crud>
+				<create>{call CreateIzvjestaj(?,?,?,?,?)}</create> <!-- PROveriti proceduru za datum generalno za create -->
+				<retrieve>{call RetrieveAllIzvjestajZaposleni()}</retrieve>
+				<update>{call UpdateIzvjestaj(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteIzvjestaj(?)}</delete>
+			</crud>
+		</table>
+		<table code="Popis inventara" name="Popis inventara">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip izvjestaja</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+
+			<column code="Detaljno" group="0" name="Detaljno" nullable="true" primary="false" size="500" type="varchar(500)" />
+
+			<column code="Kreirao zaposleni" group="0" name="Kreirao zaposleni" nullable="false" primary="false" size="120" type="varchar(120)">
+				<!-- Ova kolona nije deo fizičke tabele, koristi se samo za prikaz -->
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Datum kreiranja" group="0" name="Datum kreiranja" nullable="false" primary="false" size="" type="datetime" />
+
+			<crud>
+				<create>{call CreateIzvjestaj(?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllIzvjestajInventar()}</retrieve>
+				<update>{call UpdateIzvjestaj(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteIzvjestaj(?)}</delete>
+			</crud>
+		</table>
+
+	</package>
+	<package name="Inventar">
+		<table code="Trajni materijalni resursi" name="Trajni materijalni resursi">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Tip resursa" group="0" name="Tip resursa" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip trajnog resursa</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="false" size="250" type="varchar(250)" />
+			<column code="Status resursa" group="0" name="Status resursa" nullable="false" primary="false" size="" type="int">
+				<reftable>Status trajnog resursa</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Zadužio službenik" group="0" name="Zadužio službenik" nullable="false" primary="false" size="" type="int">
+				<reftable>Registar zaposlenih</reftable>
+				<refcolumn>Broj znacke</refcolumn>
+			</column>
+			<column code="Organizaciona jedinica" group="0" name="Organizaciona jedinica" nullable="true" primary="false" size="120" type="varchar(120)">
+				<reftable>Organizaciona jedinica</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Ugovor" group="0" name="Ugovor" nullable="true" primary="false" size="120" type="varchar(120)">
+				<reftable>Ugovor</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Nabavka" group="0" name="Nabavka" nullable="true" primary="false" size="120" type="varchar(120)">
+				<reftable>Nabavka</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<crud>
+				<create>{call CreateTrajniMaterijalniResurs(?,?,?,?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllTrajniMaterijalniResurs()}</retrieve>
+				<update>{call UpdateTrajniMaterijalniResurs(?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteTrajniMaterijalniResurs(?)}</delete>
+			</crud>
+		</table>
+		<table code="Sitan inventar" name="Sitan inventar">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip sitnog inventara</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="false" size="250" type="varchar(250)" />
+			<column code="Količina" group="0" name="Količina" nullable="false" primary="false" size="0" type="int" />
+			<column code="Poslovna jedinica" group="0" name="Poslovna jedinica" nullable="false" primary="false" size="" type="bigint">
+				<reftable>Poslovni sistem</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<crud>
+				<create>{call CreateSitanInventar(?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllSitanInventar()}</retrieve>
+				<update>{call UpdateSitanInventar(?,?,?,?,?,?)}</update>
+				<delete>{call DeleteSitanInventar(?)}</delete>
+			</crud>
+		</table>
+
+	</package>
+
+	<package name="Aplikativna podrška">
+		<package name="Administracija korisnika">
+			<table code="Korisnički nalog" name="Korisnički nalog">
+				<groups>
+					<group id="0" name="Ime grupe" />
+				</groups>
+				<column code="User ID" group="0" name="User ID" nullable="false" primary="true" size="30" type="varchar(30)" />
+				<column code="Username" group="0" name="Username" nullable="false" primary="false" size="15" type="varchar(15)" />
+				<column code="Password" group="0" name="Password" nullable="true" primary="false" size="256" type="varchar(256)" />
+				<column code="Datum registracije" group="0" name="Datum registracije" nullable="false" primary="false" size="" type="datetime" />
+				<column code="Br. značke" group="0" name="Br. značke" nullable="false" primary="false" size="" type="int">
+					<reftable>Registar zaposlenih</reftable>
+					<refcolumn>Broj znacke</refcolumn>
+				</column>
+				<column code="Aktivan" group="0" name="Aktivan" nullable="false" primary="false" size="" type="bit" />
+				<column code="Poslovni sistem" group="0" name="Poslovni sistem" nullable="false" primary="false" size="" type="bigint">
+					<reftable>Poslovni sistem</reftable>
+					<refcolumn>Naziv</refcolumn>
+				</column>
+				<column code="Država" group="0" name="Država" nullable="false" primary="false" size="3" type="char(3)">
+					<reftable>Država</reftable>
+					<refcolumn>Naziv</refcolumn>
+				</column>
+				<crud>
+					<create>{call CreateKorisnickiNalog(?,?,?,?,?,?,?)}</create>
+					<retrieve>{call RetrieveAllKorisnickiNalog()}</retrieve>
+					<update>{call UpdateKorisnickiNalog(?,?,?,?,?,?,?,?)}</update>
+					<delete>{call DeleteKorisnickiNalog(?)}</delete>
+				</crud>
+			</table>
+		</package>
+
+	</package>
+	<package name="Registar">
+		<table code="Zaposleni" name="Zaposleni">
+			<groups>
+				<group id="0" name="Osnovni podaci" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Ime" group="0" name="Ime" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Ime roditelja" group="0" name="Ime roditelja" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Prezime" group="0" name="Prezime" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="JMBG" group="0" name="JMBG" nullable="false" primary="false" size="13" type="varchar(13)" />
+			<column code="Pol" group="0" name="Pol" nullable="false" primary="false" size="1" type="char(1)" />
+			<column code="Br. značke" group="0" name="Br. značke" nullable="false" primary="false" size="" type="int" />
+			<column code="Jedinica" group="0" name="Jedinica" nullable="false" primary="false" size="" type="bigint">
+				<reftable>Poslovni sistem</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Država" group="0" name="Država" nullable="false" primary="false" size="3" type="char(3)">
+				<reftable>Država</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<crud>
+				<create>{call CreateZaposleni(?,?,?,?,?,?,?,?)}</create>
+				<retrieve>{call RetreiveAllZaposleni()}</retrieve>
+				<update>{call UpdateZaposleni(?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteZaposleni(?)}</delete>
+			</crud>
+		</table>
+
+		<table code="Vozila" name="Vozila">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Broj šasije" group="0" name="Broj šasije" nullable="false" primary="false" size="20" type="varchar(20)" />
+			<column code="Marka" group="0" name="Marka" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Model" group="0" name="Model" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Registracija" group="0" name="Registracija" nullable="true" primary="false" size="20" type="varchar(20)" />
+			<column code="Godina proizvodnje" group="0" name="Godina proizvodnje" nullable="false" primary="false" size="" type="int" />
+			<column code="Opis" group="0" name="Opis" nullable="false" primary="false" size="200" type="varchar(200)" />
+			<crud>
+				<create>{call CreateVozilo(?,?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllVozila()}</retrieve>
+				<update>{call UpdateVozilo(?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteVozilo(?)}</delete>
+			</crud>
+		</table>
+		<table code="Osobe" name="Osobe">
+			<groups>
+				<group id="0" name="Osobe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Ime" group="0" name="Ime" nullable="false" primary="false" size="20" type="varchar(20)" />
+			<column code="Prezime" group="0" name="Prezime" nullable="false" primary="false" size="20" type="varchar(20)" />
+			<column code="Nadimak" group="0" name="Nadimak" nullable="true" primary="false" size="20" type="varchar(20)" />
+			<column code="Status osobe" group="0" name="Status osobe" nullable="false" primary="false" size="" type="int">
+				<reftable>Status osobe</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="false" size="200" type="varchar(200)" />
+			<column code="Datum rodjenja" group="0" name="Datum rodjenja" nullable="false" primary="false" size="" type="datetime" />
+			<column code="Br. telefona" group="0" name="Br. telefona" nullable="true" primary="false" size="25" type="varchar(25)" />
+			<column code="Email" group="0" name="Email" nullable="true" primary="false" size="50" type="varchar(50)" />
+			<column code="Adresa stanovanja" group="0" name="Adresa stanovanja" nullable="false" primary="false" size="" type="int">
+				<reftable>Lokacije</reftable>
+				<refcolumn>Adresa</refcolumn>
+			</column>
+			<column code="Opština" group="0" name="Opština" nullable="false" primary="false" size="3" type="numeric(3,0)">
+				<reftable>Opština</reftable>
+				<refcolumn>Naziv opštine</refcolumn>
+			</column>
+			<column code="Država" group="0" name="Država" nullable="false" primary="false" size="3" type="char(3)">
+				<reftable>Država</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<crud>
+				<create>{call CreateOsoba(?,?,?,?,?,?,?,?,?,?,?)}</create>
+				<retrieve>{call RetrieveAllOsobe()}</retrieve>
+				<update>{call UpdateOsoba(?,?,?,?,?,?,?,?,?,?,?,?)}</update>
+				<delete>{call DeleteOsoba(?)}</delete>
+			</crud>
+		</table>
+		<table code="Objekti" name="Objekti">
+			<groups>
+				<group id="0" name="Ime grupe" />
+			</groups>
+			<column code="Identifikator" group="0" name="Identifikator" nullable="false" primary="true" size="" type="int" />
+			<column code="Naziv" group="0" name="Naziv" nullable="false" primary="false" size="50" type="varchar(50)" />
+			<column code="Tip" group="0" name="Tip" nullable="false" primary="false" size="" type="int">
+				<reftable>Tip fizickog objekta</reftable>
+				<refcolumn>Naziv</refcolumn>
+			</column>
+			<column code="Opis" group="0" name="Opis" nullable="true" primary="false" size="250" type="varchar(250)" />
+			<crud>
+				<create>{call CreateObjekat(?,?,?)}</create>
+				<retrieve>{call RetrieveAllObjekti()}</retrieve>
+				<update>{call UpdateObjekat(?,?,?,?)}</update>
+				<delete>{call DeleteObjekat(?)}</delete>
+			</crud>
+		</table>
+	</package>
+
+
+</database>
